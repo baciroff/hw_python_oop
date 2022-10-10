@@ -9,11 +9,13 @@ class UnsupportedTypeTraining(Exception):
 
 class InfoMessage:
     """Информационное сообщение о тренировке."""
+
     def __init__(self, training_type: str,
                 duration: float,
                 distance: float,
                 speed: float,
                 calories: float) -> None:
+
         self.training_type = training_type
         self.duration = duration
         self.distance = distance
@@ -30,6 +32,7 @@ class InfoMessage:
     
 class Training:
     """Базовый класс тренировки."""
+
     LEN_STEP: float = 0.65
     M_IN_KM: int = 1000
     MIN_IN_HOUR: int = 60
@@ -39,6 +42,7 @@ class Training:
                  duration: float,
                  weight: float,
                  ) -> None:
+                 
         self.action = action
         self.duration = duration
         self.weight = weight
@@ -84,11 +88,13 @@ class Running(Training):
 
     def __init__(self, action: int,
                  duration: float,
-                 weight: float) -> None:
+                 weight: float
+                 ) -> None:
         super().__init__(action, duration, weight)
 
     def get_spent_calories(self) -> float:
         """Расчет израсходованных калорий."""
+
         mean_speed = self.get_mean_speed()
         temp = self.COEF_CALORIE_1 * mean_speed - self.COEF_CALORIE_2
         calorie = (temp * self.weight
@@ -168,7 +174,6 @@ def read_package(workout_type: str, data: list) -> Training:
     }
     training_object = types_of_workout.get(workout_type)
     return training_object(*data)
-
 
 
 def main(training: Training) -> None:
