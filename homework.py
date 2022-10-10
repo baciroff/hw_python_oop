@@ -10,11 +10,13 @@ class UnsupportedTypeTraining(Exception):
 class InfoMessage:
     """Информационное сообщение о тренировке."""
 
-    def __init__(self, training_type: str,
+    def __init__(self,
+                training_type: str,
                 duration: float,
                 distance: float,
                 speed: float,
-                calories: float) -> None:
+                calories: float
+                ) -> None:
 
         self.training_type = training_type
         self.duration = duration
@@ -23,7 +25,7 @@ class InfoMessage:
         self.calories = calories
 
     def get_message(self) -> str:
-        return(f'Тип тренировки: {self.training_type}; Длительность: '
+        return (f'Тип тренировки: {self.training_type}; Длительность: '
                 f'{self.duration:.3f} ч.; Дистанция: {self.distance:.3f} км; '
                 f'Ср. скорость: {self.speed:.3f} км/ч; Потрачено ккал: '
                 f'{self.calories:.3f}.'
