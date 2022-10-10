@@ -1,5 +1,3 @@
-from statistics import mean
-from turtle import distance
 
 
 class UnsupportedTypeTraining(Exception):
