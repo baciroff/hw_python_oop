@@ -65,7 +65,9 @@ class Running(Training):
     def get_spent_calories(self) -> float:
         """Расчет израсходованных калорий."""
 
-        return ((self.COEF_CALORIE_1 * self.get_mean_speed() - self.COEF_CALORIE_2) * self.weight / self.M_IN_KM * self.duration * self.MIN_IN_HOUR)
+        return ((self.COEF_CALORIE_1 * self.get_mean_speed() - self.
+        COEF_CALORIE_2) * self.weight / self.M_IN_KM * self.duration * 
+        self.MIN_IN_HOUR)
 
 
 @dataclass
@@ -81,9 +83,8 @@ class SportsWalking(Training):
         speed = self.get_mean_speed()
         weight = self.weight
         height = self.height
-        temp = self.duration * self.MIN_IN_HOUR
-        temp_2 = speed ** self.COEF_2 // height
-        calorie = weight * ((self.COEF_1 + temp_2 * self.COEF_3)) * temp
+        calorie = weight * ((self.COEF_1 + (speed ** self.COEF_2 // 
+        height) * self.COEF_3)) * (self.duration * self.MIN_IN_HOUR)
         return calorie
 
 
@@ -119,9 +120,9 @@ class Swimming(Training):
 def read_package(workout_type: str, data: List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
     types_of_workout = {
-        'SWM': type(Swimming),
-        'RUN': type(Running),
-        'WLK': type(SportsWalking)
+        'SWM': Swimming,
+        'RUN': Running,
+        'WLK': SportsWalking
     }
     if workout_type not in types_of_workout.keys():
         raise UnsupportedTypeTraining('Неподдерживаемый тип тренировки')
