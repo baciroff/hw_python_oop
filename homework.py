@@ -1,3 +1,5 @@
+from dataclasses import dataclass
+from typing import ClassVar, List
 
 
 class UnsupportedTypeTraining(Exception):
@@ -5,78 +7,53 @@ class UnsupportedTypeTraining(Exception):
     print(Exception)
 
 
+@dataclass
 class InfoMessage:
     """Информационное сообщение о тренировке."""
 
-    def __init__(self,
-                 training_type: str,
-                 duration: float,
-                 distance: float,
-                 speed: float,
-                 calories: float
-                 ) -> None:
-
-        self.training_type = training_type
-        self.duration = duration
-        self.distance = distance
-        self.speed = speed
-        self.calories = calories
+    training_type: str
+    duration: float
+    distance: float
+    speed: float
+    calories: float
 
     def get_message(self) -> str:
         return (f'Тип тренировки: {self.training_type}; Длительность: '
                 f'{self.duration:.3f} ч.; Дистанция: {self.distance:.3f} км; '
                 f'Ср. скорость: {self.speed:.3f} км/ч; Потрачено ккал: '
-                f'{self.calories:.3f}.'
-                )
+                f'{self.calories:.3f}.')
 
 
+@dataclass
 class Training:
     """Базовый класс тренировки."""
 
-    LEN_STEP: float = 0.65
-    M_IN_KM: int = 1000
-    MIN_IN_HOUR: int = 60
-
-    def __init__(self,
-                 action: int,
-                 duration: float,
-                 weight: float,
-                 ) -> None:
-
-        self.action = action
-        self.duration = duration
-        self.weight = weight
+    LEN_STEP: ClassVar[float] = 0.65
+    M_IN_KM: ClassVar[int] = 1000
+    MIN_IN_HOUR: ClassVar[int] = 60
+    action: int
+    duration: float
+    weight: float
 
     def get_distance(self) -> float:
         """Получить дистанцию в км."""
-        temp = self.action
-        distance = temp * self.LEN_STEP / self.M_IN_KM
-        return distance
+        return self.action * self.LEN_STEP / self.M_IN_KM
 
     def get_mean_speed(self) -> float:
         """Получить среднюю скорость движения."""
-        distance = self.get_distance()
-        mean_speed = distance / self.duration
-        return mean_speed
+        return self.get_distance() / self.duration
 
     def get_spent_calories(self) -> float:
         """Получить количество затраченных калорий."""
-        pass
+        raise NotImplementedError("Please Implement this method")
 
     def show_training_info(self) -> InfoMessage:
         """Вернуть информационное сообщение о выполненной тренировке."""
-        training_type = type(self).__name__
-        duration = self.duration
-        distance = self.get_distance()
-        speed = self.get_mean_speed()
-        calories = self.get_spent_calories()
-        info_obj = InfoMessage(training_type,
-                               duration,
-                               distance,
-                               speed,
-                               calories
-                               )
-        return info_obj
+        return InfoMessage(type(self).__name__,
+                           self.duration,
+                           self.get_distance(),
+                           self.get_mean_speed(),
+                           self.get_spent_calories())
 
 
 class Running(Training):
@@ -85,38 +62,20 @@ class Running(Training):
     COEF_CALORIE_1: int = 18
     COEF_CALORIE_2: int = 20
 
-    def __init__(self, action: int,
-                 duration: float,
-                 weight: float
-                 ) -> None:
-        super().__init__(action, duration, weight)
-
     def get_spent_calories(self) -> float:
         """Расчет израсходованных калорий."""
 
-        mean_speed = self.get_mean_speed()
-        temp = self.COEF_CALORIE_1 * mean_speed - self.COEF_CALORIE_2
-        calorie = (temp * self.weight
-                   / self.M_IN_KM * self.duration * self.MIN_IN_HOUR
-                   )
-        return calorie
+        return ((self.COEF_CALORIE_1 * self.get_mean_speed() - self.COEF_CALORIE_2) * self.weight / self.M_IN_KM * self.duration * self.MIN_IN_HOUR)
 
 
+@dataclass
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
 
-    COEF_1: float = 0.035
-    COEF_2: float = 2
-    COEF_3: float = 0.029
-
-    def __init__(self,
-                 action: int,
-                 duration: float,
-                 weight: float,
-                 height: float
-                 ) -> None:
-        super().__init__(action, duration, weight)
-        self.height = height
+    COEF_1: ClassVar[float] = 0.035
+    COEF_2: ClassVar[int] = 2
+    COEF_3: ClassVar[float] = 0.029
+    height: float
 
     def get_spent_calories(self) -> float:
         speed = self.get_mean_speed()
@@ -128,23 +87,15 @@ class SportsWalking(Training):
         return calorie
 
 
+@dataclass
 class Swimming(Training):
     """Тренировка: плавание."""
 
-    LEN_STEP: float = 1.38
-    COEF_1: float = 1.1
-    COEF_2: float = 2
-
-    def __init__(self,
-                 action: int,
-                 duration: float,
-                 weight: float,
-                 length_pool: float,
-                 count_pool: float
-                 ) -> None:
-        super().__init__(action, duration, weight)
-        self.length_pool = length_pool
-        self.count_pool = count_pool
+    LEN_STEP: ClassVar[float] = 1.38
+    COEF_1: ClassVar[float] = 1.1
+    COEF_2: ClassVar[int] = 2
+    length_pool: float
+    count_pool: float
 
     def get_mean_speed(self) -> float:
         """Расчет средней скорости"""
@@ -165,13 +116,15 @@ class Swimming(Training):
         return distance
 
 
-def read_package(workout_type: str, data: list) -> Training:
+def read_package(workout_type: str, data: List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
     types_of_workout = {
-        'SWM': Swimming,
-        'RUN': Running,
-        'WLK': SportsWalking
+        'SWM': type(Swimming),
+        'RUN': type(Running),
+        'WLK': type(SportsWalking)
     }
+    if workout_type not in types_of_workout.keys():
+        raise UnsupportedTypeTraining('Неподдерживаемый тип тренировки')
     training_object = types_of_workout.get(workout_type)
     return training_object(*data)
 
