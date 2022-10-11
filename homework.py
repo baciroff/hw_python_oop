@@ -84,8 +84,8 @@ class SportsWalking(Training):
         weight = self.weight
         height = self.height
         calorie = weight * ((self.COEF_1 + (speed ** self.
-                             COEF_2 // height) * self.COEF_3)) * (self.
-                              duration * self.MIN_IN_HOUR)
+                  COEF_2 // height) * self.COEF_3)) * (self.
+                  duration * self.MIN_IN_HOUR)
         return calorie
 
 
