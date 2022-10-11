@@ -66,8 +66,8 @@ class Running(Training):
         """Расчет израсходованных калорий."""
 
         return ((self.COEF_CALORIE_1 * self.get_mean_speed() - self.
-                 COEF_CALORIE_2) * self.weight / self.M_IN_KM * self.
-                 duration * self.MIN_IN_HOUR)
+                COEF_CALORIE_2) * self.weight / self.M_IN_KM * self.
+                duration * self.MIN_IN_HOUR)
 
 
 @dataclass
