@@ -1,9 +1,10 @@
 from dataclasses import dataclass
-from typing import ClassVar, List
+from typing import ClassVar, Dict, List
 
 
 class UnsupportedTypeTraining(Exception):
     """Исключение для неподдерживаемых типов тренировки."""
+    pass
 
 
 @dataclass
@@ -125,15 +126,15 @@ class Swimming(Training):
 
 def read_package(workout_type: str, data: List[int]) -> Training:
     """Прочитать данные полученные от датчиков."""
-    types_of_workout = {
+    types_of_workout: Dict[str, float] = {
         'SWM': Swimming,
         'RUN': Running,
         'WLK': SportsWalking
-    }
+    }  # type: ignore
     if workout_type not in types_of_workout.keys():
-        raise UnsupportedTypeTraining('Неподдерживаемый тип тренировки')
+        raise UnsupportedTypeTraining('{workout_type} - неподдерживаемый тип тренировки')
     training_object = types_of_workout.get(workout_type)
-    return training_object(*data)
+    return training_object(*data)  # type: ignore
 
 
 def main(training: Training) -> None:
