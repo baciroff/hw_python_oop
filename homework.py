@@ -70,8 +70,8 @@ class Running(Training):
         """Расчет израсходованных калорий."""
 
         return ((self.COEF_CALORIE_1 * self.get_mean_speed()
-                 - self.COEF_CALORIE_2) * self.weight / self.M_IN_KM
-                 * self.duration * self.MIN_IN_HOUR)
+                - self.COEF_CALORIE_2) * self.weight / self.M_IN_KM
+                * self.duration * self.MIN_IN_HOUR)
 
 
 class SportsWalking(Training):
@@ -91,8 +91,8 @@ class SportsWalking(Training):
         self.height = height
 
     def get_spent_calories(self) -> float:
-        return (self.weight * (self.COEF_1 + (self.get_mean_speed() 
-                ** self.COEF_2 // self.height) * self.COEF_3) 
+        return (self.weight * (self.COEF_1 + (self.get_mean_speed()
+                ** self.COEF_2 // self.height) * self.COEF_3)
                 * (self.duration * self.MIN_IN_HOUR))
 
 
@@ -116,12 +116,12 @@ class Swimming(Training):
     def get_mean_speed(self) -> float:
         """Расчет средней скорости"""
         return ((self.length_pool * self.count_pool) 
-                 / self.M_IN_KM / self.duration)
+                / self.M_IN_KM / self.duration)
 
     def get_spent_calories(self) -> float:
         """Расчет израсходованных калорий."""
-        return ((self.get_mean_speed() + self.COEF_1) * self.COEF_2 
-                 * self.weight)
+        return ((self.get_mean_speed() + self.COEF_1) * self.COEF_2
+                * self.weight)
 
 
 def read_package(workout_type: str, data: List[int]) -> Training:
@@ -132,7 +132,8 @@ def read_package(workout_type: str, data: List[int]) -> Training:
         'WLK': SportsWalking
     }  # type: ignore
     if workout_type not in types_of_workout.keys():
-        raise UnsupportedTypeTraining('{workout_type} - неподдерживаемый тип тренировки')
+        raise UnsupportedTypeTraining(f'{workout_type}'
+                                      f'неподдерживаемый тип тренировки')
     training_object = types_of_workout.get(workout_type)
     return training_object(*data)  # type: ignore
 
