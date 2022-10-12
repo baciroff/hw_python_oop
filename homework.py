@@ -1,5 +1,5 @@
 from dataclasses import dataclass
-from typing import ClassVar, Dict, List, Type
+from typing import Dict, List, Type
 
 
 class UnsupportedTypeTraining(Exception):
