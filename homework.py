@@ -27,9 +27,9 @@ class InfoMessage:
 class Training:
     """Базовый класс тренировки."""
 
-    LEN_STEP: ClassVar[float] = 0.65
-    M_IN_KM: ClassVar[int] = 1000
-    MIN_IN_HOUR: ClassVar[int] = 60
+    LEN_STEP: float = 0.65
+    M_IN_KM: int = 1000
+    MIN_IN_HOUR: int = 60
 
     def __init__(self,
                  action: int,
@@ -77,10 +77,9 @@ class Running(Training):
 class SportsWalking(Training):
     """Тренировка: спортивная ходьба."""
 
-    COEF_1: ClassVar[float] = 0.035
-    COEF_2: ClassVar[int] = 2
-    COEF_3: ClassVar[float] = 0.029
-    height: float
+    COEF_1: float = 0.035
+    COEF_2: int = 2
+    COEF_3: float = 0.029
 
     def __init__(self,
                  action: int,
@@ -99,9 +98,9 @@ class SportsWalking(Training):
 class Swimming(Training):
     """Тренировка: плавание."""
 
-    LEN_STEP: ClassVar[float] = 1.38
-    COEF_1: ClassVar[float] = 1.1
-    COEF_2: ClassVar[int] = 2
+    LEN_STEP: float = 1.38
+    COEF_1: float = 1.1
+    COEF_2: int = 2
 
     def __init__(self,
                  action: int,
